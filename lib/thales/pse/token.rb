@@ -23,9 +23,9 @@ module Thales
           raise TokenError, "Slot is not available!" if is_empty?(@slot)
 
           expect = [
-            { matcher: "new token label:", block_key: :token_label, timeout: 1 },
-            { matcher: "enter Security Officer\'s pin:", block_key: :token_so_pin, timeout: 1 },
-            { matcher: "confirm Security Officer\'s pin:", block_key: :token_so_pin_confirm, timeout: 1 }
+            { matcher: "new token label:", block_key: :token_label, timeout: 5 },
+            { matcher: "enter Security Officer\'s pin:", block_key: :token_so_pin, timeout: 5 },
+            { matcher: "confirm Security Officer\'s pin:", block_key: :token_so_pin_confirm, timeout: 5 }
           ]
 
           #slot = block.call(:slot) || 0
@@ -57,9 +57,9 @@ module Thales
 
           expect = [
             # this key is handled locally not passed to external
-            { matcher: "Security Officer PIN.+:|current user PIN.+:", block_key: :auth_pin, timeout: 3 },
-            { matcher: "enter the new user PIN.+:", block_key: :token_user_pin, timeout: 1 },
-            { matcher: "confirm the new user PIN.+:", block_key: :token_user_pin_confirm, timeout: 1 }
+            { matcher: "Security Officer PIN.+:|current user PIN.+:", block_key: :auth_pin, timeout: 5 },
+            { matcher: "enter the new user PIN.+:", block_key: :token_user_pin, timeout: 5 },
+            { matcher: "confirm the new user PIN.+:", block_key: :token_user_pin_confirm, timeout: 5 }
           ]
 
           #slot = block.call(:slot) || 0
@@ -98,7 +98,7 @@ module Thales
           raise TokenError, "Slot is not available!" if is_empty?(@slot)
 
           expect = [
-            { matcher: "Enter user PIN.+:", block_key: :token_user_pin, timeout: 1 }
+            { matcher: "Enter user PIN.+:", block_key: :token_user_pin, timeout: 1, timeout_after: 60*5 }
           ]
 
           type = args.first
@@ -183,7 +183,7 @@ module Thales
           raise TokenError, "Slot is not available!" if is_empty?(@slot)
 
           expect = [
-            { matcher: "Enter user PIN.+:", block_key: :token_user_pin, timeout: 1 }
+            { matcher: "Enter user PIN.+:", block_key: :token_user_pin, timeout: 60 }
           ]
 
           keylabel = block.call(:keylabel)
@@ -208,19 +208,19 @@ module Thales
 
           cn = block.call(:common_name)
           raise Error, "Common name is mandatory" if is_empty?(cn)
-          expect << { matcher: "Common Name:", block_key: :cn, timeout: 1 }
+          expect << { matcher: "Common Name:", block_key: :cn, timeout: 5 }
           org = block.call(:org)
-          expect << { matcher: "Organization:", block_key: :org, timeout: 1 }
+          expect << { matcher: "Organization:", block_key: :org, timeout: 5 }
           ou = block.call(:ou)
-          expect << { matcher: "Organizational Unit:", block_key: :ou, timeout: 1 }
+          expect << { matcher: "Organizational Unit:", block_key: :ou, timeout: 5 }
           loc = block.call(:locality)
-          expect << { matcher: "Locality:", block_key: :loc, timeout: 1 }
+          expect << { matcher: "Locality:", block_key: :loc, timeout: 5 }
           st = block.call(:state)
-          expect << { matcher: "State:", block_key: :st, timeout: 1 }
+          expect << { matcher: "State:", block_key: :st, timeout: 5 }
           ctry = block.call(:country)
-          expect << { matcher: "Country:", block_key: :ctry, timeout: 1 }
+          expect << { matcher: "Country:", block_key: :ctry, timeout: 5 }
           sn = block.call(:serial_no) || SecureRandom.uuid.gsub("-","")
-          expect << { matcher: "certificate\'s serial number.+:", block_key: :sn, timeout: 1 }
+          expect << { matcher: "certificate\'s serial number.+:", block_key: :sn, timeout: 5 }
 
           params = ["c","-l#{keylabel}", "-s#{slot}"]
           if not_empty?(validFrom)
@@ -240,6 +240,7 @@ module Thales
               when :params
                 params
               when :expect_list
+                #[expect[0]]
                 expect
               when :cn
                 cn
