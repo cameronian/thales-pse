@@ -183,7 +183,7 @@ module Thales
           raise TokenError, "Slot is not available!" if is_empty?(@slot)
 
           expect = [
-            { matcher: "Enter user PIN.+:", block_key: :token_user_pin, timeout: 1 },
+            { matcher: "Enter user PIN.+:", block_key: :token_user_pin, timeout: 1 }
           ]
 
           keylabel = block.call(:keylabel)
