@@ -163,7 +163,7 @@ module Thales
             cli_exec("ctkmu") do |ops, val|
               case ops
               when :params
-                ["c","-t#{type}","-s#{slot}","-n#{keylabel}","-a#{atRes.join}"]
+                ["c","-t#{type}","-s#{slot}","-n#{keylabel}","-a#{atRes.join}","-z#{keysize}"]
               when :expect_list
                 expect
               else
